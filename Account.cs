@@ -48,7 +48,7 @@ namespace MyEmail
             ini.Writue("SettingImg", "Path", "IMG.Path");
             // 读取ini
             string stemp = ini.ReadValue("Setting","key2");
-            Console.WriteLine(stemp);
+            lbAccount.Items.Add(stemp);
 
 
 
