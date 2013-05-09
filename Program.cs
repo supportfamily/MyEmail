@@ -26,7 +26,10 @@ namespace MyEmail
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 //			Application.Run(new frmAccount());
-			Application.Run(new frmMainForm());
+//			Application.Run(new frmMainForm());
+			Application.Run(new MailReceiver());
+			
+			
 		}
 		
 	}

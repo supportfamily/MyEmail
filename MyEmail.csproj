@@ -51,6 +51,10 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Files.cs" />
     <Compile Include="iniFile.cs" />
+    <Compile Include="MailReceiver.cs" />
+    <Compile Include="MailReceiver.Designer.cs">
+      <DependentUpon>MailReceiver.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -59,6 +63,9 @@
     <Compile Include="xmlFile.cs" />
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MailReceiver.resx">
+      <DependentUpon>MailReceiver.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
