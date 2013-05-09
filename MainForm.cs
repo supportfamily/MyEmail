@@ -17,9 +17,9 @@ namespace MyEmail
 	/// <summary>
 	/// Description of MainForm.
 	/// </summary>
-	public partial class MainForm : Form
+	public partial class frmMainForm : Form
 	{
-		public MainForm()
+		public frmMainForm()
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.

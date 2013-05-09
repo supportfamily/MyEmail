@@ -29,7 +29,7 @@ namespace MyEmail
         {
             this.sPath = path;
         }
-        public void Writue(string section, string key, string value)
+        public void WriteValue(string section, string key, string value)
         {
             // section=配置节，key=键名，value=键值，path=路径
             WritePrivateProfileString(section, key, value, sPath);
