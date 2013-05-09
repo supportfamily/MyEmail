@@ -11,6 +11,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections;
+
+//TODO:新增加账号后，frmAccount窗体需刷新
 
 
 namespace MyEmail
@@ -31,49 +34,83 @@ namespace MyEmail
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 		}
-		
-		void ListView1SelectedIndexChanged(object sender, EventArgs e)
+		public string isFirstAccount="no";
+		public string firstAccount
 		{
-			
+			get
+			{
+				return isFirstAccount;
+			}
+			set
+			{
+				if(isFirstAccount!=value)
+				{
+//					this.label6.Visible=true;
+//					this.txtAccountName.Visible=true;
+					this.panel1.Visible=false;
+//					this.btnOK.Visible=true;
+//					this.btnCancel.Visible=true;
+					this.AcceptButton=btnOK;
+					this.CancelButton=btnCancel;	
+					this.gbAccount.Controls.Remove(label6);
+				}
+				else
+				{				
+					//删除账户名称及其文本框控件
+					this.gbAccount.Controls.Remove(label6);
+					this.gbAccount.Controls.Remove(txtAccountName);
+//					btnOK.Text="确定修改";
+					
+					//改变控件位置
+					foreach(Control c in this.gbAccount.Controls)
+					{
+						c.Location=new Point(c.Location.X, c.Location.Y-30);
+					}					
+				}
+			}			
 		}
+
 		public void LoadIniFile()
 		{
 			string Current;
             Current = Directory.GetCurrentDirectory();//获取当前根目录
-
             // 写入ini
             iniFile ini=new iniFile(Current+"/config.ini");
-            ini.WriteValue("Setting","key1","hello word!");
-            ini.WriteValue("Setting","key2","hello ini!");
-            ini.WriteValue("SettingImg", "Path", "IMG.Path");
+//            ini.WriteValue("Setting","key1","hello word!");
+//            ini.WriteValue("Setting","key2","hello ini!");
+//            ini.WriteValue("SettingImg", "Path", "IMG.Path");
             // 读取ini
-            string stemp = ini.ReadValue("Setting","key2");
-            lbAccount.Items.Add(stemp);
-
-
-
+//            string stemp = ini.ReadValue("Setting","key2");
+//                  lbAccount.Items.Add(stemp);
+            ArrayList list=ini.ReadSections();
+            foreach(object o in list)
+            {
+            	lbAccount.Items.Add(o.ToString());
+            }
+            if(lbAccount.Items.Count!=0)
+            {
+            	lbAccount.SelectedIndex=0;
+            }  
 		}
 		
 		void FrmAccountLoad(object sender, EventArgs e)
 		{
-//			LoadIniFile();
-			ReadAccount();
+			LoadIniFile();
+//			ReadAccount();
 		}
 		public void ReadAccount()
 		{
 			lbAccount.Refresh();
 			string Current;
             Current = Directory.GetCurrentDirectory();//获取当前根目录
-            // 写入ini
+            string AccountName=lbAccount.SelectedItem.ToString();
             iniFile ini=new iniFile(Current+"/config.ini");
-            txtAccountName.Text=ini.ReadValue("Account","AccountName");
-            txtPOP3.Text=ini.ReadValue("Account","POP3");
-            txtSMTP.Text=ini.ReadValue("Account","SMTP");
-            txtUsername.Text=ini.ReadValue("Account","username");
-            txtPassword.Text=ini.ReadValue("Account","password");
-            txtPort.Text=ini.ReadValue("Account","port");
-			lbAccount.Items.Add(txtAccountName.Text);
-					
+            txtAccountName.Text=ini.ReadValue(AccountName,"AccountName");
+            txtPOP3.Text=ini.ReadValue(AccountName,"POP3");
+            txtSMTP.Text=ini.ReadValue(AccountName,"SMTP");
+            txtUsername.Text=ini.ReadValue(AccountName,"username");
+            txtPassword.Text=ini.ReadValue(AccountName,"password");
+            txtPort.Text=ini.ReadValue(AccountName,"port");					
 		}
 		public void WriteAccount()
 		{
@@ -84,23 +121,51 @@ namespace MyEmail
 			//username
 			//password
 			//port
-			string Current;
-            Current = Directory.GetCurrentDirectory();//获取当前根目录
-            // 写入ini
-            iniFile ini=new iniFile(Current+"/config.ini");
-            ini.WriteValue("Account","AccountName",txtAccountName.Text.Trim());
-            ini.WriteValue("Account","POP3",txtPOP3.Text.Trim());
-            ini.WriteValue("Account","SMTP",txtSMTP.Text.Trim());
-            ini.WriteValue("Account","username",txtUsername.Text.Trim());
-            ini.WriteValue("Account","password",txtPassword.Text.Trim());
-            ini.WriteValue("Account","port",txtPort.Text.Trim());
+
+            string AccountName=txtAccountName.Text.Trim();
+            if(!string.IsNullOrEmpty(AccountName))
+            {
+            	string Current;
+	            Current = Directory.GetCurrentDirectory();//获取当前根目录
+	            // 写入ini
+	            iniFile ini=new iniFile(Current+"/config.ini");
+	            ini.WriteValue(AccountName,"AccountName",AccountName);
+	            ini.WriteValue(AccountName,"POP3",txtPOP3.Text.Trim());
+	            ini.WriteValue(AccountName,"SMTP",txtSMTP.Text.Trim());
+	            ini.WriteValue(AccountName,"username",txtUsername.Text.Trim());
+	            ini.WriteValue(AccountName,"password",txtPassword.Text.Trim());
+	            ini.WriteValue(AccountName,"port",txtPort.Text.Trim());
+            }
 		}
 		
 		void BtnAddAccountClick(object sender, EventArgs e)
 		{
+//			WriteAccount();
+//			frmAccount addAccount=new frmAccount();
+//			addAccount.Show();
+//			addAccount.panel1.Visible=false;
+//			addAccount.label6.Visible=true;
+//			addAccount.txtAccountName.Visible=true;
+			frmAccount firstAccount=new frmAccount();
+            firstAccount.firstAccount="yes";
+            firstAccount.Show();
+			
+		}
+		
+		void BtnCancelClick(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+		
+		void BtnOKClick(object sender, EventArgs e)
+		{
 			WriteAccount();
-			Form addAccount=new frmAccount();
-//			addAccount
+			this.Close();
+		}
+		
+		void LbAccountSelectedIndexChanged(object sender, EventArgs e)
+		{
+			ReadAccount();
 		}
 	}
 }

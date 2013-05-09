@@ -9,6 +9,7 @@
 
 using System;
 using System.Xml;
+using System.Collections;
 
 namespace MyEmail
 {
@@ -23,6 +24,10 @@ namespace MyEmail
         // 声明INI文件的读操作函数 GetPrivateProfileString()
         [System.Runtime.InteropServices.DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section, string key, string def, System.Text.StringBuilder retVal, int size, string filePath);
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+ 		public extern static int GetPrivateProfileSectionNamesA(byte[] buffer, int iLen, string fileName);
+ 
 
         private string sPath = null;
         public iniFile(string path)
@@ -44,7 +49,28 @@ namespace MyEmail
 
         }
 
-		
+		/// 返回该配置文件中所有Section名称的集合
+		 public ArrayList ReadSections() {
+		     byte[] buffer = new byte[65535];
+		     int rel = GetPrivateProfileSectionNamesA(buffer, buffer.GetUpperBound(0), sPath);
+		     int iCnt,
+		     iPos;
+		     ArrayList arrayList = new ArrayList();
+		     string tmp;
+		     if (rel > 0) {
+		         iCnt = 0;
+		         iPos = 0;
+		         for (iCnt = 0; iCnt < rel; iCnt++) {
+		             if (buffer[iCnt] == 0x00) {
+		                 tmp = System.Text.ASCIIEncoding.Default.GetString(buffer, iPos, iCnt - iPos).Trim();
+		                 iPos = iCnt + 1;
+		                 if (tmp != "") arrayList.Add(tmp);
+		             }
+		         }
+		     }
+		     
+		     return arrayList;
+		 }
 		
 //		string path="";
 //
@@ -52,6 +78,7 @@ namespace MyEmail
 		
 		public iniFile()
 		{
+			
 		}
 //		public override void writeFile()
 //		{

@@ -90,8 +90,9 @@ namespace MyEmail
 			// 账户ToolStripMenuItem
 			// 
 			this.账户ToolStripMenuItem.Name = "账户ToolStripMenuItem";
-			this.账户ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+			this.账户ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.账户ToolStripMenuItem.Text = "账户";
+			this.账户ToolStripMenuItem.Click += new System.EventHandler(this.账户ToolStripMenuItemClick);
 			// 
 			// 工具ToolStripMenuItem
 			// 
